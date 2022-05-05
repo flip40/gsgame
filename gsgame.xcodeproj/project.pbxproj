@@ -7,8 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		892B66081B1638A600343A1B /* DrawUtils.c in Sources */ = {isa = PBXBuildFile; fileRef = 892B66071B1638A600343A1B /* DrawUtils.c */; };
-		892B660E1B163BF000343A1B /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 892B660D1B163BF000343A1B /* SDL2.framework */; };
+		484C3218282478130097967F /* DrawUtils.c in Sources */ = {isa = PBXBuildFile; fileRef = 484C3216282478130097967F /* DrawUtils.c */; };
+		484C321B282480180097967F /* libSDL2-2.0.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 484C321A282480180097967F /* libSDL2-2.0.0.dylib */; };
+		484C321C282480180097967F /* libSDL2-2.0.0.dylib in Embed Libraries */ = {isa = PBXBuildFile; fileRef = 484C321A282480180097967F /* libSDL2-2.0.0.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		893E3CE31B31E80800F6023F /* Game.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 893E3CE11B31E80800F6023F /* Game.cpp */; };
 		8975A2891B163CB500FF6B7A /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8975A2881B163CB500FF6B7A /* OpenGL.framework */; };
 		8977E4F91B1842C20093ACBB /* AI.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8977E4D31B1842C20093ACBB /* AI.cpp */; };
@@ -34,6 +35,17 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		484C321D282480180097967F /* Embed Libraries */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				484C321C282480180097967F /* libSDL2-2.0.0.dylib in Embed Libraries */,
+			);
+			name = "Embed Libraries";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		892B65BF1B1637AD00343A1B /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 12;
@@ -47,6 +59,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		484C3216282478130097967F /* DrawUtils.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = DrawUtils.c; sourceTree = "<group>"; };
+		484C3217282478130097967F /* DrawUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DrawUtils.h; sourceTree = "<group>"; };
+		484C321928247FF90097967F /* lib */ = {isa = PBXFileReference; lastKnownFileType = folder; name = lib; path = ../../../../usr/local/Cellar/sdl2/2.0.22/lib; sourceTree = "<group>"; };
+		484C321A282480180097967F /* libSDL2-2.0.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libSDL2-2.0.0.dylib"; path = "../../../../usr/local/Cellar/sdl2/2.0.22/lib/libSDL2-2.0.0.dylib"; sourceTree = "<group>"; };
 		892B65C11B1637AD00343A1B /* gsgame */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = gsgame; sourceTree = BUILT_PRODUCTS_DIR; };
 		892B66071B1638A600343A1B /* DrawUtils.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = DrawUtils.c; path = ../DrawUtils/DrawUtils.c; sourceTree = "<group>"; };
 		892B660D1B163BF000343A1B /* SDL2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2.framework; path = ../../../../Library/Frameworks/SDL2.framework; sourceTree = "<group>"; };
@@ -99,7 +115,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				892B660E1B163BF000343A1B /* SDL2.framework in Frameworks */,
+				484C321B282480180097967F /* libSDL2-2.0.0.dylib in Frameworks */,
 				8975A2891B163CB500FF6B7A /* OpenGL.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -107,10 +123,20 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		484C3215282477E90097967F /* utilities */ = {
+			isa = PBXGroup;
+			children = (
+				484C3216282478130097967F /* DrawUtils.c */,
+				484C3217282478130097967F /* DrawUtils.h */,
+			);
+			path = utilities;
+			sourceTree = "<group>";
+		};
 		892B65B81B1637AD00343A1B = {
 			isa = PBXGroup;
 			children = (
 				897BE4241E7907F700A9B77D /* resources */,
+				484C3215282477E90097967F /* utilities */,
 				8977E4D21B1842C20093ACBB /* gsgame */,
 				8975A2881B163CB500FF6B7A /* OpenGL.framework */,
 				892B660D1B163BF000343A1B /* SDL2.framework */,
@@ -177,6 +203,8 @@
 		897BE41D1E771C2B00A9B77D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				484C321A282480180097967F /* libSDL2-2.0.0.dylib */,
+				484C321928247FF90097967F /* lib */,
 				897BE4201E771CB800A9B77D /* lib */,
 			);
 			name = Frameworks;
@@ -192,6 +220,7 @@
 				892B65BD1B1637AD00343A1B /* Sources */,
 				892B65BE1B1637AD00343A1B /* Frameworks */,
 				892B65BF1B1637AD00343A1B /* CopyFiles */,
+				484C321D282480180097967F /* Embed Libraries */,
 			);
 			buildRules = (
 			);
@@ -216,6 +245,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 			);
 			mainGroup = 892B65B81B1637AD00343A1B;
@@ -235,13 +265,13 @@
 			files = (
 				8977E4FD1B1842C20093ACBB /* AnimationJump.cpp in Sources */,
 				8977E5041B1842C20093ACBB /* Network.cpp in Sources */,
-				892B66081B1638A600343A1B /* DrawUtils.c in Sources */,
 				8977E5071B1842C20093ACBB /* TileClear.cpp in Sources */,
 				8977E4FE1B1842C20093ACBB /* Camera.cpp in Sources */,
 				8977E4FF1B1842C20093ACBB /* Character.cpp in Sources */,
 				893E3CE31B31E80800F6023F /* Game.cpp in Sources */,
 				8977E4F91B1842C20093ACBB /* AI.cpp in Sources */,
 				8977E5051B1842C20093ACBB /* Source.cpp in Sources */,
+				484C3218282478130097967F /* DrawUtils.c in Sources */,
 				8977E50A1B1842C20093ACBB /* TileLadder.cpp in Sources */,
 				8977E5021B1842C20093ACBB /* Frame.cpp in Sources */,
 				8977E5091B1842C20093ACBB /* TileJumpable.cpp in Sources */,
@@ -299,6 +329,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				NEW_SETTING = "";
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
 			};
@@ -337,6 +368,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				NEW_SETTING = "";
 				SDKROOT = macosx;
 			};
 			name = Release;
@@ -352,15 +384,26 @@
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
-					/usr/local/Cellar/glew/2.0.0/include/GL,
-					"/Library/Frameworks/SDL2.framework/**",
+					/usr/local/Cellar/glew/2.2.0_1/include/GL,
 					/usr/local/include/DrawUtils,
+					"/usr/local/Cellar/sdl2/**",
+					./utilities,
 				);
 				LIBRARY_SEARCH_PATHS = (
-					/usr/local/Cellar/glew/2.0.0/lib,
-					"/Library/Frameworks/SDL2.framework/**",
+					/usr/local/Cellar/glew/2.2.0_1/lib,
+					"/usr/local/Cellar/sdl2/**",
+					./utilities,
+					/usr/local/Cellar/sdl2/2.0.22/lib,
 				);
-				OTHER_LDFLAGS = "-lGLEW";
+				OTHER_CFLAGS = (
+					"-I/usr/local/include/SDL2",
+					"-D_THREAD_SAFE",
+				);
+				OTHER_LDFLAGS = (
+					"-lGLEW",
+					"-L/usr/local/lib",
+					"-lSDL2",
+				);
 				PRODUCT_NAME = gsgame;
 			};
 			name = Debug;
@@ -376,15 +419,26 @@
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
-					/usr/local/Cellar/glew/2.0.0/include/GL,
-					"/Library/Frameworks/SDL2.framework/**",
+					/usr/local/Cellar/glew/2.2.0_1/include/GL,
 					/usr/local/include/DrawUtils,
+					"/usr/local/Cellar/sdl2/**",
+					./utilities,
 				);
 				LIBRARY_SEARCH_PATHS = (
-					/usr/local/Cellar/glew/2.0.0/lib,
-					"/Library/Frameworks/SDL2.framework/**",
+					/usr/local/Cellar/glew/2.2.0_1/lib,
+					"/usr/local/Cellar/sdl2/**",
+					./utilities,
+					/usr/local/Cellar/sdl2/2.0.22/lib,
 				);
-				OTHER_LDFLAGS = "-lGLEW";
+				OTHER_CFLAGS = (
+					"-I/usr/local/include/SDL2",
+					"-D_THREAD_SAFE",
+				);
+				OTHER_LDFLAGS = (
+					"-lGLEW",
+					"-L/usr/local/lib",
+					"-lSDL2",
+				);
 				PRODUCT_NAME = gsgame;
 			};
 			name = Release;
