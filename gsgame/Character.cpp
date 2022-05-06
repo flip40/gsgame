@@ -7,7 +7,7 @@
 #include"AnimationClimbUp.h"
 #include"AnimationClimbDown.h"
 
-Character::Character(float x, float y, int z, float width, float height, int radius, float velocity, vector<Animation*> animations) : Drawable(y, z) {
+Character::Character(float x, float y, int z, float width, float height, int radius, float velocity, vector<Animation*> animations, bool shouldAnimate) : Drawable(y, z) {
 	this->x = x;
 	this->y = y;
 	this->z = z;
@@ -27,6 +27,7 @@ Character::Character(float x, float y, int z, float width, float height, int rad
 	this->left = false;
 	this->right = false;
 	this->animationTime = 0;
+	this->shouldAnimate = shouldAnimate;
 }
 
 void Character::move(bool up, bool down, bool left, bool right, bool mult, float deltaTime, Map* map) {
@@ -117,6 +118,10 @@ void Character::draw(Camera* camera) {
 }
 
 void Character::updateAnimation(bool up, bool down, bool left, bool right, float deltaTime) {
+	if (!shouldAnimate) {
+		return;
+	}
+	
 	int previousAnimation = currentAnimation;
 
 	if (animating) {
@@ -133,33 +138,40 @@ void Character::updateAnimation(bool up, bool down, bool left, bool right, float
 			stopClimbing(deltaTime);
 		}
 		animationTime -= deltaTime;
-	}
-	else {
+	} else {
 		if (climbing) {
 			currentAnimation = 14;
 		}
 		else if (up && !right && !left) {
+//			cout << "up" << "\n";
 			currentAnimation = 1;
 		}
 		else if (down && !right && !left) {
+//			cout << "down" << "\n";
 			currentAnimation = 2;
 		}
 		else if (left && !up && !down) {
+//			cout << "left" << "\n";
 			currentAnimation = 3;
 		}
 		else if (right && !up && !down) {
+//			cout << "right" << "\n";
 			currentAnimation = 4;
 		}
 		else if (up && left) {
+//			cout << "up left" << "\n";
 			currentAnimation = 5;
 		}
 		else if (up && right) {
+//			cout << "up right" << "\n";
 			currentAnimation = 6;
 		}
 		else if (down && left) {
+//			cout << "down left" << "\n";
 			currentAnimation = 7;
 		}
 		else if (down && right) {
+//			cout << "down right" << "\n";
 			currentAnimation = 8;
 		}
 
@@ -171,8 +183,10 @@ void Character::updateAnimation(bool up, bool down, bool left, bool right, float
 				return;
 			}
 			else {
+//				cout << "standing" << "\n";
 				currentAnimation = 0;
 				if (currentAnimation != previousAnimation) {
+//					cout << "resetting" << "\n";
 					animations[currentAnimation]->setFrame(previousAnimation - 1);
 					animations[previousAnimation]->reset();
 					return;
@@ -182,13 +196,46 @@ void Character::updateAnimation(bool up, bool down, bool left, bool right, float
 				}
 			}
 		}
+		
+//		cout << "current anim:" << currentAnimation << "\n";
 	}
 
-	animations[currentAnimation]->update(deltaTime);
+	if (currentAnimation != 0) {
+		animations[currentAnimation]->update(deltaTime);
+	}
 
 	if (currentAnimation != previousAnimation) {
 		animations[previousAnimation]->reset();
 	}
+}
+
+void Character::updateAnimationByPrevCoords(float prevX, float prevY, float deltaTime) {
+	if (!shouldAnimate) {
+		return;
+	}
+
+	float curX = this->getX();
+	float curY = this->getY();
+	
+	bool up = down = left = right = false;
+	
+	if (curY == prevY) {
+		up = down = false;
+	} else if (curY > prevY) {
+		down = true;
+	} else {
+		up = true;
+	}
+	
+	if (curX == prevX) {
+		right = left = false;
+	}else if (curX > prevX) {
+		right = true;
+	} else {
+		left = true;
+	}
+	
+	this->updateAnimation(up, down, left, right, deltaTime);
 }
 
 void Character::jump(float deltaTime) {

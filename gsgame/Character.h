@@ -14,14 +14,16 @@ class Character : public Drawable {
 	bool up, down, left, right;
 	float animationTime;
 	vector<class Animation*> animations;
+	bool shouldAnimate;
 public:
-	Character(float x, float y, int z, float width, float height, int radius, float velocity, vector<class Animation*> animations);
+	Character(float x, float y, int z, float width, float height, int radius, float velocity, vector<class Animation*> animations, bool shouldAnimate);
 	void move(bool up, bool down, bool left, bool right, bool mult, float deltaTime, class Map* map);
 	void setPos(float x, float y, float z);
 	void setPos(float x, float y, class Map* map);
 	void revert(); //temporary to handle map collision, I want the character to "bounce" or slide at angles on the map, but this will do for now.
 	void draw(class Camera* camera);
 	void updateAnimation(bool up, bool down, bool left, bool right, float deltaTime);
+	void updateAnimationByPrevCoords(float prevX, float prevY, float deltaTime);
 	void jump(float deltaTime);
 	void push(float deltaTime);
 	void startClimbing(float deltaTime);

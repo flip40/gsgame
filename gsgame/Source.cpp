@@ -253,27 +253,57 @@ int main(void)
 		new Animation(.1, cClimb),
 		new AnimationClimbUp(.4, cClimbUp) };
 //	character = new Character(40, 40, 0, 16, 31, 8, 32, charAnims);
-	character = new Character(400, 350, 0, 16, 31, 8, 32, charAnims);
-	//character = new Character(400, 350, 0, 16, 31, 8, 32, charAnims); //map 3
+//	character = new Character(400, 350, 0, 16, 31, 8, 32, charAnims);
+	character = new Character(400, 350, 0, 16, 31, 8, 32, charAnims, true); //map 3
 	vector<Frame> jStanding = {
 		Frame(glTexImageTGAFile("resources/chars/jenna/standing/standing2.tga", NULL, NULL), 26, 33), //hacky atm, have a change in character that will be removed later
 		Frame(glTexImageTGAFile("resources/chars/jenna/standing/standing2.tga", NULL, NULL), 26, 33), //assumes 2 is down, as in the future all characters should have all 8 directions
 	};
+//	vector<Animation*> jennaAnims = {
+//		new Animation(-1, jStanding),
+//	};
 	vector<Animation*> jennaAnims = {
-		new Animation(-1, jStanding),
+		new Animation(-1, cStanding),
+		new Animation(.1, cRunUp),
+		new Animation(.1, cRunDown),
+		new Animation(.1, cRunLeft),
+		new Animation(.1, cRunRight),
+		new Animation(.1, cRunUpLeft),
+		new Animation(.1, cRunUpRight),
+		new Animation(.1, cRunDownLeft),
+		new Animation(.1, cRunDownRight),
+		new AnimationJump(.5, cJumpUp),
+		new AnimationJump(.5, cJumpDown),
+		new AnimationJump(.5, cJumpLeft),
+		new AnimationJump(.5, cJumpRight),
+		new AnimationClimbDown(.3, cClimbDown),
+		new Animation(.1, cClimb),
+		new AnimationClimbUp(.4, cClimbUp)
 	};
 
 	map = new Map(3);
  
-	//jenna = new Character(200, 90, 0, 26, 33, 32, jennaAnims);
-	jenna = new Character(350.3, 350.3, 0, 16, 31, 8, 32, jennaAnims);
-	//jennaAI = new AI(map, jenna, character, &aiQueue);
+//	jenna = new Character(200, 90, 0, 26, 33, 32, jennaAnims);
+//	jenna = new Character(350.3, 350.3, 0, 16, 31, 8, 32, jennaAnims, false);
+	jenna = new Character(350.3, 350.3, 0, 16, 31, 8, 32, jennaAnims, true);
+	jennaAI = new AI(map, jenna, character, &aiQueue);
 
 	vector<Frame> goldFrames = {
 		Frame(glTexImageTGAFile("resources/gold.tga", NULL, NULL), 8, 10), //hacky atm, have a change in character that will be removed later
 		Frame(glTexImageTGAFile("resources/gold.tga", NULL, NULL), 8, 10), //assumes 2 is down, as in the future all characters should have all 8 directions
 	};
-	vector<Animation*> goldAnims = { new Animation(-1, goldFrames) };
+//	vector<Animation*> goldAnims = { new Animation(-1, goldFrames) };
+	vector<Animation*> goldAnims = {
+		new Animation(-1, goldFrames),
+		new Animation(-1, goldFrames),
+		new Animation(-1, goldFrames),
+		new Animation(-1, goldFrames),
+		new Animation(-1, goldFrames),
+		new Animation(-1, goldFrames),
+		new Animation(-1, goldFrames),
+		new Animation(-1, goldFrames),
+		new Animation(-1, goldFrames)
+	};
 
 	//Column* column = new Column(64, 80, 0, 18, 50, glTexImageTGAFile("resources/maps/column.tga", NULL, NULL));
 
@@ -281,7 +311,7 @@ int main(void)
 
 	vector<Character*> characters = { character, jenna };
 	vector<Drawable*> drawables = { (Drawable*)character, (Drawable*)jenna/*, (Drawable*)column*/ };
-	//vector<AI*> ai = { jennaAI };
+	vector<AI*> ai = { jennaAI };
 
 	Uint32 lastFrameMs;
 	Uint32 currentFrameMs = SDL_GetTicks();
@@ -495,7 +525,7 @@ int main(void)
 				/* 1. Physics movement */
 				character->move(up, down, left, right, mult, physicsDeltaMs / 1000.0f, map);
 				if (column) column->move((float)physicsDeltaMs / 1000.0f);
-				//jennaAI->execute(physicsDeltaMs / 1000.0f);
+				jennaAI->execute(physicsDeltaMs / 1000.0f);
 				for (int i = 0; i < goldAI.size(); i++) goldAI[i]->execute(physicsDeltaMs / 1000.0f);
 				/* 2. Physics collision detection */
 				//check against other characters (a bit hardcoded at the moment, need to think a bit more. Want to avoid unnecessary repeat checks)
@@ -508,7 +538,7 @@ int main(void)
 						coins++;
 					}
 				}
-		/*		if (sqrt(pow((character->getX() - jenna->getX()), 2) + (pow((character->getY() - jenna->getY()), 2))) < (character->getRadius() + jenna->getRadius())) {
+				if (sqrt(pow((character->getX() - jenna->getX()), 2) + (pow((character->getY() - jenna->getY()), 2))) < (character->getRadius() + jenna->getRadius())) {
 					//Improvements! Just need to abstract this off somewhere and use it for character collisions, which covers about 99% of collision in this game style
 					//Just need to set up an interpretation of when/how this should be applied to non-circular objects, but I think I have a plan for that...
 					//vx/y is character movement vector
@@ -535,7 +565,7 @@ int main(void)
 					character->setPos(character->getX() + finalvx, character->getY() + finalvy, map);
 					//still push Jenna back because it's fun ^.^
 					jenna->setPos(jenna->getX() - finalvx, jenna->getY() - finalvy, map);
-				} */
+				}
 
 				/* 3. Physics collision resolution */
 				lastPhysicsFrameMs += physicsDeltaMs;
@@ -593,107 +623,107 @@ int main(void)
 				}
 				if (map->getLevel() == 1) {
 					//top left
-					gold.push_back(new Character(64, 64, 0, 8, 10, 8, 16, goldAnims));
+					gold.push_back(new Character(64, 64, 0, 8, 10, 8, 16, goldAnims, false));
 					goldAI.push_back(new AI(map, gold[0], character, &aiQueue));
-					gold.push_back(new Character(20, 20, 0, 8, 10, 8, 16, goldAnims));
+					gold.push_back(new Character(20, 20, 0, 8, 10, 8, 16, goldAnims, false));
 					goldAI.push_back(new AI(map, gold[1], character, &aiQueue));
 
 					//top right
-					gold.push_back(new Character(272, 64, 0, 8, 10, 8, 16, goldAnims));
+					gold.push_back(new Character(272, 64, 0, 8, 10, 8, 16, goldAnims, false));
 					goldAI.push_back(new AI(map, gold[2], character, &aiQueue));
-					gold.push_back(new Character(292, 20, 0, 8, 10, 8, 16, goldAnims));
+					gold.push_back(new Character(292, 20, 0, 8, 10, 8, 16, goldAnims, false));
 					goldAI.push_back(new AI(map, gold[3], character, &aiQueue));
 
 					//bottom left
-					gold.push_back(new Character(64, 272, 0, 8, 10, 8, 16, goldAnims));
+					gold.push_back(new Character(64, 272, 0, 8, 10, 8, 16, goldAnims, false));
 					goldAI.push_back(new AI(map, gold[4], character, &aiQueue));
-					gold.push_back(new Character(20, 292, 0, 8, 10, 8, 16, goldAnims));
+					gold.push_back(new Character(20, 292, 0, 8, 10, 8, 16, goldAnims, false));
 					goldAI.push_back(new AI(map, gold[5], character, &aiQueue));
 
 					//bottom right
-					gold.push_back(new Character(272, 272, 0, 8, 10, 8, 16, goldAnims));
+					gold.push_back(new Character(272, 272, 0, 8, 10, 8, 16, goldAnims, false));
 					goldAI.push_back(new AI(map, gold[6], character, &aiQueue));
-					gold.push_back(new Character(292, 292, 0, 8, 10, 8, 16, goldAnims));
+					gold.push_back(new Character(292, 292, 0, 8, 10, 8, 16, goldAnims, false));
 					goldAI.push_back(new AI(map, gold[7], character, &aiQueue));
 
 					//center left
-					gold.push_back(new Character(104, 120, 0, 8, 10, 8, 16, goldAnims));
+					gold.push_back(new Character(104, 120, 0, 8, 10, 8, 16, goldAnims, false));
 					goldAI.push_back(new AI(map, gold[8], character, &aiQueue));
-					gold.push_back(new Character(104, 180, 0, 8, 10, 8, 16, goldAnims));
+					gold.push_back(new Character(104, 180, 0, 8, 10, 8, 16, goldAnims, false));
 					goldAI.push_back(new AI(map, gold[9], character, &aiQueue));
 
 					//center right
-					gold.push_back(new Character(232, 120, 0, 8, 10, 8, 16, goldAnims));
+					gold.push_back(new Character(232, 120, 0, 8, 10, 8, 16, goldAnims, false));
 					goldAI.push_back(new AI(map, gold[10], character, &aiQueue));
-					gold.push_back(new Character(232, 180, 0, 8, 10, 8, 16, goldAnims));
+					gold.push_back(new Character(232, 180, 0, 8, 10, 8, 16, goldAnims, false));
 					goldAI.push_back(new AI(map, gold[11], character, &aiQueue));
 
 				}
 				else if (map->getLevel() == 2) {
 					//center left
-					gold.push_back(new Character(304, 120, 0, 8, 10, 8, 16, goldAnims));
+					gold.push_back(new Character(304, 120, 0, 8, 10, 8, 16, goldAnims, false));
 					goldAI.push_back(new AI(map, gold[0], character, &aiQueue));
-					gold.push_back(new Character(304, 140, 0, 8, 10, 8, 16, goldAnims));
+					gold.push_back(new Character(304, 140, 0, 8, 10, 8, 16, goldAnims, false));
 					goldAI.push_back(new AI(map, gold[1], character, &aiQueue));
-					gold.push_back(new Character(304, 160, 0, 8, 10, 8, 16, goldAnims));
+					gold.push_back(new Character(304, 160, 0, 8, 10, 8, 16, goldAnims, false));
 					goldAI.push_back(new AI(map, gold[2], character, &aiQueue));
-					gold.push_back(new Character(304, 180, 0, 8, 10, 8, 16, goldAnims));
+					gold.push_back(new Character(304, 180, 0, 8, 10, 8, 16, goldAnims, false));
 					goldAI.push_back(new AI(map, gold[3], character, &aiQueue));
-					gold.push_back(new Character(304, 200, 0, 8, 10, 8, 16, goldAnims));
+					gold.push_back(new Character(304, 200, 0, 8, 10, 8, 16, goldAnims, false));
 					goldAI.push_back(new AI(map, gold[4], character, &aiQueue));
-					gold.push_back(new Character(304, 220, 0, 8, 10, 8, 16, goldAnims));
+					gold.push_back(new Character(304, 220, 0, 8, 10, 8, 16, goldAnims, false));
 					goldAI.push_back(new AI(map, gold[5], character, &aiQueue));
-					gold.push_back(new Character(304, 240, 0, 8, 10, 8, 16, goldAnims));
+					gold.push_back(new Character(304, 240, 0, 8, 10, 8, 16, goldAnims, false));
 					goldAI.push_back(new AI(map, gold[6], character, &aiQueue));
 
 					//center right
-					gold.push_back(new Character(432, 120, 0, 8, 10, 8, 16, goldAnims));
+					gold.push_back(new Character(432, 120, 0, 8, 10, 8, 16, goldAnims, false));
 					goldAI.push_back(new AI(map, gold[7], character, &aiQueue));
-					gold.push_back(new Character(432, 140, 0, 8, 10, 8, 16, goldAnims));
+					gold.push_back(new Character(432, 140, 0, 8, 10, 8, 16, goldAnims, false));
 					goldAI.push_back(new AI(map, gold[8], character, &aiQueue));
-					gold.push_back(new Character(432, 160, 0, 8, 10, 8, 16, goldAnims));
+					gold.push_back(new Character(432, 160, 0, 8, 10, 8, 16, goldAnims, false));
 					goldAI.push_back(new AI(map, gold[9], character, &aiQueue));
-					gold.push_back(new Character(432, 180, 0, 8, 10, 8, 16, goldAnims));
+					gold.push_back(new Character(432, 180, 0, 8, 10, 8, 16, goldAnims, false));
 					goldAI.push_back(new AI(map, gold[10], character, &aiQueue));
-					gold.push_back(new Character(432, 200, 0, 8, 10, 8, 16, goldAnims));
+					gold.push_back(new Character(432, 200, 0, 8, 10, 8, 16, goldAnims, false));
 					goldAI.push_back(new AI(map, gold[11], character, &aiQueue));
-					gold.push_back(new Character(432, 220, 0, 8, 10, 8, 16, goldAnims));
+					gold.push_back(new Character(432, 220, 0, 8, 10, 8, 16, goldAnims, false));
 					goldAI.push_back(new AI(map, gold[12], character, &aiQueue));
-					gold.push_back(new Character(432, 240, 0, 8, 10, 8, 16, goldAnims));
+					gold.push_back(new Character(432, 240, 0, 8, 10, 8, 16, goldAnims, false));
 					goldAI.push_back(new AI(map, gold[13], character, &aiQueue));
 				}
 				else if (map->getLevel() == 3) {
 					//center
-					gold.push_back(new Character(370, 324, 0, 8, 10, 8, 16, goldAnims));
+					gold.push_back(new Character(370, 324, 0, 8, 10, 8, 16, goldAnims, false));
 					goldAI.push_back(new AI(map, gold[0], character, &aiQueue));
-					gold.push_back(new Character(390, 324, 0, 8, 10, 8, 16, goldAnims));
+					gold.push_back(new Character(390, 324, 0, 8, 10, 8, 16, goldAnims, false));
 					goldAI.push_back(new AI(map, gold[1], character, &aiQueue));
-					gold.push_back(new Character(410, 324, 0, 8, 10, 8, 16, goldAnims));
+					gold.push_back(new Character(410, 324, 0, 8, 10, 8, 16, goldAnims, false));
 					goldAI.push_back(new AI(map, gold[2], character, &aiQueue));
-					gold.push_back(new Character(430, 324, 0, 8, 10, 8, 16, goldAnims));
+					gold.push_back(new Character(430, 324, 0, 8, 10, 8, 16, goldAnims, false));
 					goldAI.push_back(new AI(map, gold[3], character, &aiQueue));
-					gold.push_back(new Character(450, 324, 0, 8, 10, 8, 16, goldAnims));
+					gold.push_back(new Character(450, 324, 0, 8, 10, 8, 16, goldAnims, false));
 					goldAI.push_back(new AI(map, gold[4], character, &aiQueue));
-					gold.push_back(new Character(470, 324, 0, 8, 10, 8, 16, goldAnims));
+					gold.push_back(new Character(470, 324, 0, 8, 10, 8, 16, goldAnims, false));
 					goldAI.push_back(new AI(map, gold[5], character, &aiQueue));
-					gold.push_back(new Character(490, 324, 0, 8, 10, 8, 16, goldAnims));
+					gold.push_back(new Character(490, 324, 0, 8, 10, 8, 16, goldAnims, false));
 					goldAI.push_back(new AI(map, gold[6], character, &aiQueue));
 
 
-					gold.push_back(new Character(420, 245, 2, 8, 10, 8, 16, goldAnims));
+					gold.push_back(new Character(420, 245, 2, 8, 10, 8, 16, goldAnims, false));
 					goldAI.push_back(new AI(map, gold[7], character, &aiQueue));
-					gold.push_back(new Character(416, 240, 2, 8, 10, 8, 16, goldAnims));
+					gold.push_back(new Character(416, 240, 2, 8, 10, 8, 16, goldAnims, false));
 					goldAI.push_back(new AI(map, gold[8], character, &aiQueue));
-					gold.push_back(new Character(410, 235, 2, 8, 10, 8, 16, goldAnims));
+					gold.push_back(new Character(410, 235, 2, 8, 10, 8, 16, goldAnims, false));
 					goldAI.push_back(new AI(map, gold[9], character, &aiQueue));
-					gold.push_back(new Character(425, 250, 2, 8, 10, 8, 16, goldAnims));
+					gold.push_back(new Character(425, 250, 2, 8, 10, 8, 16, goldAnims, false));
 					goldAI.push_back(new AI(map, gold[10], character, &aiQueue));
-					gold.push_back(new Character(405, 230, 2, 8, 10, 8, 16, goldAnims));
+					gold.push_back(new Character(405, 230, 2, 8, 10, 8, 16, goldAnims, false));
 					goldAI.push_back(new AI(map, gold[11], character, &aiQueue));
 
-					gold.push_back(new Character(340, 230, 2, 8, 10, 8, 16, goldAnims));
+					gold.push_back(new Character(340, 230, 2, 8, 10, 8, 16, goldAnims, false));
 					goldAI.push_back(new AI(map, gold[12], character, &aiQueue));
-					gold.push_back(new Character(320, 240, 2, 8, 10, 8, 16, goldAnims));
+					gold.push_back(new Character(320, 240, 2, 8, 10, 8, 16, goldAnims, false));
 					goldAI.push_back(new AI(map, gold[13], character, &aiQueue));
 
 					column = new Column(368, 320, 0, 18, 50, glTexImageTGAFile("resources/maps/column.tga", NULL, NULL));

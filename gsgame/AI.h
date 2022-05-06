@@ -11,6 +11,7 @@ class AI {
 	int state;
 	float toX, toY;
 	float executeTime;
+	float waitTime;
 public:
 	AI(class Map* map, class Character* character, class Character* toCharacter, queue<AI*>* aiQueue);
 	void execute(float deltaTime);
@@ -21,5 +22,6 @@ private:
 	void wander(float deltaTime);
 	void goAway(float deltaTime);
 	void goTo(float deltaTime);
+	void wait(float deltaTime);
 };
 

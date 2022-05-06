@@ -139,7 +139,7 @@ Game::Game(string saveFile) {
 		new AnimationClimbDown(.3, cClimbDown),
 		new Animation(.1, cClimb),
 		new AnimationClimbUp(.4, cClimbUp) };
-	character = new Character(400, 350, 0, 16, 31, 8, 32, charAnims);
+	character = new Character(400, 350, 0, 16, 31, 8, 32, charAnims, true);
 	vector<Frame> jStanding = {
 		Frame(glTexImageTGAFile("resources/chars/jenna/standing/standing2.tga", NULL, NULL), 26, 33), //hacky atm, have a change in character that will be removed later
 		Frame(glTexImageTGAFile("resources/chars/jenna/standing/standing2.tga", NULL, NULL), 26, 33), //assumes 2 is down, as in the future all characters should have all 8 directions
@@ -150,7 +150,7 @@ Game::Game(string saveFile) {
 	
 	map = new Map(3);
 	
-	Character* jenna = new Character(350.3, 350.3, 0, 16, 31, 8, 32, jennaAnims);
+	Character* jenna = new Character(350.3, 350.3, 0, 16, 31, 8, 32, jennaAnims, true);
 	
 	AI* jennaAI = new AI(map, jenna, character, &aiQueue);
 	
